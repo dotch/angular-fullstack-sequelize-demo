@@ -5,13 +5,13 @@ var crypto = require('crypto');
 module.exports = function(sequelize, DataTypes) {
   var User = sequelize.define('User', {
     name:     { type: DataTypes.STRING },
-    email:    { type: DataTypes.STRING, unique: true, allowNull: false,
+    email:    { type: DataTypes.STRING, unique: true, allowNull: false, validate: {notEmpty: true},
       set: function(email)  {
         this.setDataValue('email', email.toLowerCase());
       }
     },
     role:     { type: DataTypes.STRING, defaultValue: 'user' },
-    password: { type: DataTypes.STRING, allowNull: false,
+    password: { type: DataTypes.STRING, allowNull: false, validate: {notEmpty: true},
       set: function(password) {
         this.salt = this.makeSalt();
         this.setDataValue('password', this.encryptPassword(password));

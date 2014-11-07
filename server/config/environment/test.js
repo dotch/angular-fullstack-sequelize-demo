@@ -4,7 +4,5 @@
 // ===========================
 module.exports = {
   // MongoDB connection options
-  mongo: {
-    uri: 'mongodb://localhost/angularfullstacksequelizedemo-test'
-  }
+  dbUrl: 'postgres://' + process.env.USER + ':@localhost:5432/pimp'
 };
