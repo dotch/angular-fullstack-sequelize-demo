@@ -20,6 +20,14 @@ module.exports = function(sequelize, DataTypes) {
     provider: { type: DataTypes.STRING },
     salt:     { type: DataTypes.STRING }
   }, {
+    getterMethods: {
+      profile: function() {
+        return {
+          name: this.name,
+          role: this.role
+        }
+      }
+    },
     instanceMethods: {
       /**
        * Authenticate - check if the passwords are the same
@@ -51,20 +59,6 @@ module.exports = function(sequelize, DataTypes) {
         if (!password || !this.salt) return '';
         var salt = new Buffer(this.salt, 'base64');
         return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('base64');
-      },
-      // Non-sensitive info we'll be putting in the token
-      getToken: function() {
-        return {
-          id: this.id,
-          role: this.role
-        }
-      },
-      // Public profile information
-      getProfile: function() {
-        return {
-          name: this.name,
-          role: this.role
-        }
       }
     }
   });

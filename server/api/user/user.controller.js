@@ -1,9 +1,5 @@
 'use strict';
 
-// TODO
-// don't ever give out the password or salt
-
-
 var User = require('../../models').User;
 var passport = require('passport');
 var config = require('../../config/environment');
@@ -19,7 +15,9 @@ var validationError = function(res, err) {
  */
 exports.index = function(req, res) {
   User
-    .findAll()
+    .findAll({
+      attributes: ['name','email','role']
+    })
     .complete(function(err, users) {
       if (err) return res.send(500, err);
       res.json(200, users);
@@ -56,11 +54,12 @@ exports.show = function(req, res, next) {
     .find({
       where: {
         id: req.params.id
-      }
+      },
     })
     .complete(function(err, user) {
+      console.log('user', user);
       if (err) return next(err);
-      if (!user) return res.send(401);
+      if (!user) return res.send(404);
       res.json(user.profile);
     });
 };
@@ -118,7 +117,8 @@ exports.me = function(req, res, next) {
     .find({
       where: {
         id: userId
-      }
+      },
+      attributes: ['name','email','role']
     })
     .complete(function(err, user) {
       if (err) return next(err);
