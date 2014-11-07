@@ -7,9 +7,11 @@ exports.setup = function (User, config) {
       passwordField: 'password' // this is the virtual field on the model
     },
     function(email, password, done) {
-      User.findOne({
-        email: email.toLowerCase()
-      }, function(err, user) {
+      User.find({
+        where: {
+          email: email.toLowerCase()
+        }
+      }).complete(function(err, user) {
         if (err) return done(err);
 
         if (!user) {
